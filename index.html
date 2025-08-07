@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <title>Gestão de Pedidos</title>
+    <title>Gestão de Pedidos (Carregamento e Separação)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" type="image/jpg" href="favicon.ico"/>
@@ -801,7 +801,7 @@
 <body>
 <div class="user-selection-container" id="userSelectionPage">
     <div class="user-selection-box">
-        <img src="logo cedisa - vertical azul.png" alt="Logo" class="logo">
+        <img src="c-high-resolution-logo.png" alt="Logo" class="logo">
         <h2>Qual serviço você executa?</h2>
 
         <div class="user-option" data-user-type="operador" onclick="selectUserType('operador')">
@@ -826,7 +826,7 @@
 
 <div class="user-selection-container" id="materialSelectionPage" style="display: none;">
     <div class="user-selection-box">
-        <img src="logo cedisa - vertical azul.png" alt="Logo" class="logo">
+        <img src="c-high-resolution-logo.png" alt="Logo" class="logo">
         <h2>Qual material você irá separar?</h2>
 
         <div class="user-option" data-material-type="Chapa" onclick="selectMaterialType('Chapa')">
@@ -890,7 +890,7 @@
 
 <div class="filter-screen-container" id="filterScreen">
     <div class="filter-box">
-        <img src="logo cedisa - vertical azul.png" alt="Logo" class="logo">
+        <img src="c-high-resolution-logo.png" alt="Logo" class="logo">
         <h2>Visualizar Pedidos</h2>
         <div class="summary-section">
             <h3>Resumo de Pedidos por Embarque</h3>
@@ -1278,7 +1278,7 @@ function hideAllScreens() {
         globalFiltroRota = "todas";
         globalFiltroStatus = "todas";
         globalFiltroMaterial = "Todos"; 
-        selectedMaterialType = true; 
+        selectedMaterialType = null; 
         pedidoUnicoVisualizado = null;
         document.getElementById("username").value = "";
         document.getElementById("password").value = "";
