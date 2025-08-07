@@ -1,2 +1,2 @@
 # Gest-o-de-Pedidos
-Material criado para implementação da minha empresa.
+Material criado para auxilio ao sistema logístico da minha empresa.
