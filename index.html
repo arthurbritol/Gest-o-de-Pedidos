@@ -2,10 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <title>Gestão de Pedidos (Carregamento e Separação)</title>
+    <title>Gestão de Pedidos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="shortcut icon" type="image/jpg" href="favicon.ico"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -213,6 +213,12 @@
         .status-pedido-separado {
             color: var(--green-success);
         }
+        .status-carregado {
+            color: var(--green-success);
+        }
+        .status-nao-carregado {
+            color: var(--red-error);
+        }
 
 
         .pedido-header h4 {
@@ -250,7 +256,7 @@
         }
 
 
-        .item input {
+        .item input[type="number"], .item input[type="text"] {
             margin-left: 15px;
             padding: 8px 12px;
             border: 1px solid var(--medium-gray);
@@ -664,7 +670,7 @@
             .pedido-header h4 { font-size: 17px; }
             .item { flex-direction: column; align-items: flex-start; padding: 10px; }
             .item span { margin-bottom: 5px; }
-            .item input { margin-left: 0; width: 100%; font-size: 15px; }
+            .item input[type="number"], .item input[type="text"] { margin-left: 0; width: 100%; font-size: 15px; }
             .card .buttons-row { justify-content: center; }
             .quotations-section h3 { font-size: 19px; }
             .quotation-item span { font-size: 15px; }
@@ -796,7 +802,107 @@
             font-weight: 500;
             color: var(--dark-gray);
         }
-    </style>
+    
+.user-selection-container,
+.login-container,
+.filter-screen-container,
+#mainApp,
+#operatorRoleSelectionPage,
+#loaderOrdersScreen,
+#materialSelectionPage {
+    display: none; 
+}
+
+#operatorRoleSelectionPage .user-option h3 {
+    color: var(--primary-blue);
+}
+
+#operatorRoleSelectionPage .user-option p {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+#loaderOrdersScreen .card {
+    border-left: 5px solid var(--primary-blue);
+}
+#loaderOrdersScreen h4 {
+    color: var(--dark-blue);
+}
+#loaderOrdersScreen .item {
+    background-color: var(--light-gray);
+    padding: 8px 12px;
+    border-radius: var(--border-radius-small);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#loaderOrdersScreen .item input[type="checkbox"] {
+    width: auto;
+    margin-left: 10px;
+}
+#loaderOrdersScreen .loader-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: flex-end;
+}
+#loaderOrdersScreen .loader-buttons button {
+    padding: 8px 15px;
+    font-size: 15px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 6px var(--shadow-light);
+}
+#loaderOrdersScreen .loader-buttons .btn-carregado {
+    background-color: var(--green-success);
+    color: var(--white);
+    border: none;
+}
+#loaderOrdersScreen .loader-buttons .btn-carregado:hover {
+    background-color: #218838;
+}
+#loaderOrdersScreen .loader-buttons .btn-nao-carregado {
+    background-color: var(--red-error);
+    color: var(--white);
+    border: none;
+}
+#loaderOrdersScreen .loader-buttons .btn-nao-carregado:hover {
+    background-color: #c82333;
+}
+#loaderOrdersScreen .observacao-nao-carregado {
+    margin-top: 10px;
+    display: none;
+}
+#loaderOrdersScreen .observacao-nao-carregado textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius-small);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    min-height: 80px;
+    resize: vertical;
+}
+#loaderOrdersScreen .embarque-group {
+    margin-bottom: 30px;
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--border-radius-medium);
+    padding: 20px;
+    background-color: var(--white);
+    box-shadow: 0 5px 15px var(--shadow-light);
+}
+#loaderOrdersScreen .embarque-group h3 {
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 2px solid var(--primary-blue);
+    padding-bottom: 10px;
+}
+
+</style>
 </head>
 <body>
 <div class="user-selection-container" id="userSelectionPage">
@@ -813,16 +919,17 @@
         </div>
 
         <div class="user-option" data-user-type="motorista" onclick="selectUserType('motorista')">
-            <img src="caminhao.png" alt="Icone Motorista" class="icon">
+            <img src="delivery-truck.png" alt="Icone Motorista" class="text-content">
             <div class="text-content">
-                <h3>Motorista</h3>
-                <p>Coletar pedidos e entregar nos locais solicitados</p>
+                <h3>Carregamento</h3>
+                <p>Carregar os materiais</p>
             </div>
         </div>
 
         <button class="user-option-button" onclick="continueToNextScreen()">Continuar</button>
     </div>
 </div>
+
 
 <div class="user-selection-container" id="materialSelectionPage" style="display: none;">
     <div class="user-selection-box">
@@ -880,7 +987,7 @@
 
 <div class="login-container" id="driverLoginPage" style="display: none;">
     <div class="login-box">
-        <h2>Acesso de Motorista</h2>
+        <h2>Acesso de Carregamento</h2>
         <input type="text" id="driverUsername" placeholder="Usuário" autocomplete="username" />
         <input type="password" id="driverPassword" placeholder="Senha" autocomplete="current-password" />
         <button onclick="fazerLoginMotorista()">Acessar Sistema</button>
@@ -902,6 +1009,15 @@
 
         <button class="filter-box-button-bottom" onclick="logout()" style="background-color: var(--text-secondary); margin-top: 15px;">Sair (Logout)</button>
     
+    </div>
+</div>
+
+
+<div class="filter-screen-container" id="loaderOrdersScreen" style="display: none;">
+    <div class="filter-box">
+        <h2>Pedidos aguardando carregamento</h2>
+        <div id="loadingOrdersList"></div>
+        <button class="filter-box-button-bottom" onclick="logout()" style="background-color: var(--text-secondary); margin-top: 15px;">Sair</button>
     </div>
 </div>
 
@@ -947,7 +1063,7 @@
 
 <script>
     const usuarios = {
-        "admin": "1234",
+         "admin": "1234",
         "operador1": "1234",
         "operador2": "1234",
         "operador3": "1234",
@@ -958,38 +1074,38 @@
     };
 
     let pedidos = [
-        { id: 10532, cliente: "Metalúrgica Central", status: "Aguardando separação", endereco: "Rua teste, 123 - Serra, ES", embarque: "#25689", motorista: "motorista1", produtos: { Chapa: ["CHAPA 1/8", "CHAPA GALVANIZADA", "CHAPA INOX 304"], Tubo: ["TUBO RETANGULAR 40x20", "TUBO REDONDO 1 1/2", "TUBO QUADRADO 20x20"], Viga: ["VIGA U 1/4", "VIGA I 200"] } },
+        { id: 10532, cliente: "Metalúrgica Central", status: "Aguardando separação", endereco: "Rua teste, 123 - Serra, ES", embarque: "Serra", motorista: "motorista1", produtos: { Chapa: ["CHAPA 1/8", "CHAPA GALVANIZADA", "CHAPA INOX 304"], Tubo: ["TUBO RETANGULAR 40x20", "TUBO REDONDO 1 1/2", "TUBO QUADRADO 20x20"], Viga: ["VIGA U 1/4", "VIGA I 200"] } },
         { id: 10533, cliente: "Construtora Brasil", status: "Aguardando separação", endereco: "Av. Exemplo, 456 - Vila Velha, ES", embarque: "#25690", motorista: "motorista2", produtos: { Chapa: ["CHAPA 3/16", "CHAPA XADREZ 1/4"], Tubo: ["TUBO REDONDO 2", "TUBO SCHEDULE 40"] } },
         { id: 10534, cliente: "Ferro e Aço LTDA", status: "Aguardando separação", endereco: "Rua das Indústrias, 1010 - Cariacica, ES", embarque: "#25691", motorista: "motorista1", produtos: { Viga: ["VIGA W 2", "VIGA H 150"], Chapa: ["CHAPA XADREZ 5/16", "CHAPA LISA 1/2"], Tubo: ["TUBO QUADRADO 50x50", "TUBO REDONDO 3"] } },
-        { id: 10535, cliente: "ConstruAço", status: "Aguardando separação", endereco: "Rodovia Norte-Sul, 999 - Serra, ES", embarque: "#25689", motorista: "motorista2", produtos: { Tubo: ["TUBO QUADRADO 50x50", "TUBO RETANGULAR 60x40", "TUBO CONDUITE 3/4"], Viga: ["VIGA H 200", "VIGA U 5", "VIGA LAMINADA 150"] } },
-        { id: 10536, cliente: "Montagens Gerais", status: "Aguardando separação", endereco: "Rua Projetada, 789 - Serra, ES", embarque: "#25689", motorista: "motorista3", produtos: { Chapa: ["CHAPA PRETA 1/4", "CHAPA FINO QUENTE 1/8", "CHAPA DE PISO ALUMÍNIO"], Tubo: ["TUBO INDUSTRIAL 3", "TUBO INOX SANITÁRIO"], Viga: ["VIGA I 300", "VIGA SOLDADA 250", "VIGA LAMINADA 200"] } },
+        { id: 10535, cliente: "ConstruAço", status: "Aguardando separação", endereco: "Rodovia Norte-Sul, 999 - Serra, ES", embarque: "Serra", motorista: "motorista2", produtos: { Tubo: ["TUBO QUADRADO 50x50", "TUBO RETANGULAR 60x40", "TUBO CONDUITE 3/4"], Viga: ["VIGA H 200", "VIGA U 5", "VIGA LAMINADA 150"] } },
+        { id: 10536, cliente: "Montagens Gerais", status: "Aguardando separação", endereco: "Rua Projetada, 789 - Serra, ES", embarque: "Serra", motorista: "motorista3", produtos: { Chapa: ["CHAPA PRETA 1/4", "CHAPA FINO QUENTE 1/8", "CHAPA DE PISO ALUMÍNIO"], Tubo: ["TUBO INDUSTRIAL 3", "TUBO INOX SANITÁRIO"], Viga: ["VIGA I 300", "VIGA SOLDADA 250", "VIGA LAMINADA 200"] } },
         { id: 10537, cliente: "Aço Forte", status: "Aguardando separação", endereco: "Av. Atlântica, 321 - Vila Velha, ES", embarque: "#25690", motorista: "motorista1", produtos: { Chapa: ["CHAPA ALUMÍNIO 2mm", "CHAPA GALVANIZADA TRAPEZOIDAL"], Viga: ["VIGA SOLDADA 600", "VIGA WIDE FLANGE 800"] } },
         { id: 10538, cliente: "Metal Capixaba", status: "Aguardando separação", endereco: "Rua dos Ferroviários, 12 - Vitória, ES", embarque: "#25692", motorista: "motorista2", produtos: { Tubo: ["TUBO ZINCADO 1", "TUBO ESTRUTURAL 100x100"], Viga: ["VIGA SOLDADA 200", "VIGA I 150"] } },
         { id: 10539, cliente: "Engemetal", status: "Aguardando separação", endereco: "Rua Industrial, 88 - Linhares, ES", embarque: "#25693", motorista: "motorista3", produtos: { Chapa: ["CHAPA LISA 1/2", "CHAPA CORTEN 3mm"], Tubo: ["TUBO REDONDO 3", "TUBO ELETRODUTO 1"] } },
         { id: 10540, cliente: "Ferroleste", status: "Aguardando separação", endereco: "Avenida Norte, 999 - Colatina, ES", embarque: "#25694", motorista: "motorista1", produtos: { Viga: ["VIGA U 5", "VIGA METÁLICA TRELIÇADA"], Chapa: ["CHAPA ANTIDERRAPANTE", "CHAPA EXPANDIDA ALUMÍNIO"] } },
         { id: 10541, cliente: "Metalúrgica União", status: "Aguardando separação", endereco: "Rod. do Contorno, 400 - Vila Velha, ES", embarque: "#25690", motorista: "motorista2", produtos: { Tubo: ["TUBO QUADRADO 40x40", "TUBO RETANGULAR 80x40", "TUBO DE CONDUÇÃO 2"], Chapa: ["CHAPA GALVANIZADA", "CHAPA PERFURADA 3mm"] } },
-        { id: 10542, cliente: "Construmetais", status: "Aguardando separação", endereco: "Rua das Oficinas, 77 - Serra, ES", embarque: "#25689", motorista: "motorista3", produtos: { Viga: ["VIGA I 250", "VIGA U 6"], Chapa: ["CHAPA LISA 3/8", "CHAPA DE AÇO CARBONO", "CHAPA DE LIGA LEVE"] } },
+        { id: 10542, cliente: "Construmetais", status: "Aguardando separação", endereco: "Rua das Oficinas, 77 - Serra, ES", embarque: "Serra", motorista: "motorista3", produtos: { Viga: ["VIGA I 250", "VIGA U 6"], Chapa: ["CHAPA LISA 3/8", "CHAPA DE AÇO CARBONO", "CHAPA DE LIGA LEVE"] } },
         { id: 10543, cliente: "Alfa Engenharia", status: "Aguardando separação", endereco: "Rua das Palmeiras, 10 - Cariacica, ES", embarque: "#25691", motorista: "motorista1", produtos: { Tubo: ["TUBO REDONDO 1 1/2", "TUBO DE PRECISÃO", "TUBO OVAL"], Chapa: ["CHAPA EXPANDIDA", "CHAPA DE LATÃO"] } },
         { id: 10544, cliente: "Beta Construções", status: "Aguardando separação", endereco: "Av. Beira Mar, 2000 - Vitória, ES", embarque: "#25692", motorista: "motorista2", produtos: { Viga: ["VIGA U 3", "VIGA DE ALUMÍNIO"], Chapa: ["CHAPA LISA 1/4", "CHAPA DE CHUMBO"] } },
         { id: 10545, cliente: "Gama Ferragens", status: "Aguardando separação", endereco: "Rua do Comércio, 50 - Linhares, ES", embarque: "#25693", motorista: "motorista3", produtos: { Chapa: ["CHAPA GALVANIZADA", "CHAPA FRISADA"], Tubo: ["TUBO RETANGULAR 20x10", "TUBO INDUSTRIAL 4", "TUBO COM COSTURA"] } },
-        { id: 10546, cliente: "Delta Estruturas", status: "Aguardando separação", endereco: "BR-101 Sul, KM 25 - Serra, ES", embarque: "#25689", motorista: "motorista1", produtos: { Viga: ["VIGA H 150", "VIGA I 100"], Chapa: ["CHAPA PRETA 3/16", "CHAPA GROSSA 1/2"] } },
+        { id: 10546, cliente: "Delta Estruturas", status: "Aguardando separação", endereco: "BR-101 Sul, KM 25 - Serra, ES", embarque: "Serra", motorista: "motorista1", produtos: { Viga: ["VIGA H 150", "VIGA I 100"], Chapa: ["CHAPA PRETA 3/16", "CHAPA GROSSA 1/2"] } },
         { id: 10547, cliente: "Épsilon Indústria", status: "Aguardando separação", endereco: "Av. Central, 300 - Vila Velha, ES", embarque: "#25690", motorista: "motorista2", produtos: { Tubo: ["TUBO REDONDO 3/4", "TUBO DE COBRE 1/2"], Chapa: ["CHAPA INOX 1mm", "CHAPA ESCOVADA"] } },
         { id: 10548, cliente: "Zeta Metalúrgica", status: "Aguardando separação", endereco: "Rua Norte, 15 - Colatina, ES", embarque: "#25694", motorista: "motorista3", produtos: { Viga: ["VIGA I 100", "VIGA W 3"], Tubo: ["TUBO QUADRADO 30x30", "TUBO RETANGULAR 50x25"] } },
-        { id: 10549, cliente: "Ômega Comércio", status: "Aguardando separação", endereco: "Praça da Matriz, 7 - Serra, ES", embarque: "#25689", motorista: "motorista1", produtos: { Chapa: ["CHAPA PERFURADA", "CHAPA DE ZINCO"], Viga: ["VIGA SOLDADA 400", "VIGA DE TRELIÇA"] } },
+        { id: 10549, cliente: "Ômega Comércio", status: "Aguardando separação", endereco: "Praça da Matriz, 7 - Serra, ES", embarque: "Serra", motorista: "motorista1", produtos: { Chapa: ["CHAPA PERFURADA", "CHAPA DE ZINCO"], Viga: ["VIGA SOLDADA 400", "VIGA DE TRELIÇA"] } },
         { id: 10550, cliente: "Ícaro Soldas", status: "Aguardando separação", endereco: "Rua da Paz, 123 - Cariacica, ES", embarque: "#25691", motorista: "motorista2", produtos: { Tubo: ["TUBO INDUSTRIAL 2", "TUBO REDONDO 5"], Chapa: ["CHAPA FINA FRIA", "CHAPA CROMADA"] } },
         { id: 10551, cliente: "Fênix Construções", status: "Aguardando separação", endereco: "Av. da República, 500 - Vitória, ES", embarque: "#25692", motorista: "motorista3", produtos: { Viga: ["VIGA W 4", "VIGA PRÉ-MOLDADA"], Tubo: ["TUBO PVC 100mm", "TUBO ESGOTO 150mm"] } },
         { id: 10552, cliente: "Grifo Metais", status: "Aguardando separação", endereco: "Rua do Sol, 888 - Linhares, ES", embarque: "#25693", motorista: "motorista1", produtos: { Chapa: ["CHAPA POLICARBONATO", "CHAPA ACRÍLICA"], Viga: ["VIGA LAMINADA 200", "VIGA DE CONCRETO PRÉ-FABRICADO"] } },
-        { id: 10553, cliente: "Draco Montagens", status: "Aguardando separação", endereco: "Rodovia do Café, KM 5 - Serra, ES", embarque: "#25689", motorista: "motorista2", produtos: { Tubo: ["TUBO OBLONGO", "TUBO DE VENTILAÇÃO"], Chapa: ["CHAPA GALVANIZADA", "CHAPA DE COBRE"] } },
+        { id: 10553, cliente: "Draco Montagens", status: "Aguardando separação", endereco: "Rodovia do Café, KM 5 - Serra, ES", embarque: "Serra", motorista: "motorista2", produtos: { Tubo: ["TUBO OBLONGO", "TUBO DE VENTILAÇÃO"], Chapa: ["CHAPA GALVANIZADA", "CHAPA DE COBRE"] } },
         { id: 10554, cliente: "Pegasus Engenharia", status: "Aguardando separação", endereco: "Rua das Rosas, 77 - Vila Velha, ES", embarque: "#25690", motorista: "motorista3", produtos: { Viga: ["VIGA CAIXÃO", "VIGA DE MADEIRA LAMINADA"], Tubo: ["TUBO DE AÇO INOX", "TUBO DE ALUMÍNIO"] } },
         { id: 10555, cliente: "Centauro Indústria", status: "Aguardando separação", endereco: "Av. Brasil, 1100 - Colatina, ES", embarque: "#25694", motorista: "motorista1", produtos: { Chapa: ["CHAPA DE COBRE", "CHAPA DE BRONZE"], Viga: ["VIGA U 8", "VIGA H 250"] } },
-        { id: 10556, cliente: "Harpia Estruturas", status: "Aguardando separação", endereco: "Rua da Serra, 45 - Serra, ES", embarque: "#25689", motorista: "motorista2", produtos: { Tubo: ["TUBO SCH 40", "TUBO DE FERRO FUNDIDO"], Chapa: ["CHAPA GROSSA", "CHAPA DE TITÂNIO"] } },
+        { id: 10556, cliente: "Harpia Estruturas", status: "Aguardando separação", endereco: "Rua da Serra, 45 - Serra, ES", embarque: "Serra", motorista: "motorista2", produtos: { Tubo: ["TUBO SCH 40", "TUBO DE FERRO FUNDIDO"], Chapa: ["CHAPA GROSSA", "CHAPA DE TITÂNIO"] } },
         { id: 10557, cliente: "Minotauro Construções", status: "Aguardando separação", endereco: "Estrada Velha, 22 - Cariacica, ES", embarque: "#25691", motorista: "motorista3", produtos: { Viga: ["VIGA I 400", "VIGA WIDE FLANGE 600"], Tubo: ["TUBO SEM COSTURA", "TUBO COM FLANGE"] } },
         { id: 10558, cliente: "Sereia Naval", status: "Aguardando separação", endereco: "Rua do Porto, 33 - Vitória, ES", embarque: "#25692", motorista: "motorista1", produtos: { Chapa: ["CHAPA NAVAL", "CHAPA DE AÇO MARÍTIMO"], Viga: ["VIGA CAIXÃO GRANDE", "VIGA GERAL"] } },
         { id: 10559, cliente: "Tritão Ferro e Aço", status: "Aguardando separação", endereco: "Av. dos Navegantes, 150 - Linhares, ES", embarque: "#25693", motorista: "motorista2", produtos: { Tubo: ["TUBO QUADRADO 100x100", "TUBO RETANGULAR 120x60"], Chapa: ["CHAPA DE PISO", "CHAPA ANTI-ABRASIVA"] } },
-        { id: 10560, cliente: "Atlas Construções", status: "Aguardando separação", endereco: "Rua Principal, 55 - Serra, ES", embarque: "#25689", motorista: "motorista3", produtos: { Viga: ["VIGA H 300", "VIGA DE PONTE"], Chapa: ["CHAPA CORTEN", "CHAPA DE PAREDE"] } },
+        { id: 10560, cliente: "Atlas Construções", status: "Aguardando separação", endereco: "Rua Principal, 55 - Serra, ES", embarque: "Serra", motorista: "motorista3", produtos: { Viga: ["VIGA H 300", "VIGA DE PONTE"], Chapa: ["CHAPA CORTEN", "CHAPA DE PAREDE"] } },
         { id: 10561, cliente: "Titã Fundições", status: "Aguardando separação", endereco: "Rodovia das Árvores, 99 - Vila Velha, ES", embarque: "#25690", motorista: "motorista1", produtos: { Chapa: ["CHAPA DE BRONZE", "CHAPA DE LIGA METÁLICA"], Tubo: ["TUBO FUNDIDO", "TUBO DE CONCRETO"] } },
         { id: 10562, cliente: "Olimpo Metais", status: "Aguardando separação", endereco: "Av. do Contorno, 1001 - Colatina, ES", embarque: "#25694", motorista: "motorista2", produtos: { Viga: ["VIGA LAMINADA 300", "VIGA ARMADA"], Chapa: ["CHAPA DE CHUMBO", "CHAPA DE ALUMÍNIO COMPOSTO"] } },
-        { id: 10563, cliente: "União Metálica", status: "Aguardando separação", endereco: "Rua das Flores, 45 - Serra, ES", embarque: "#25689", motorista: "motorista3", produtos: { Chapa: ["CHAPA PRETA 1/2", "CHAPA GALVANIZADA 2mm"], Tubo: ["TUBO REDONDO 4", "TUBO QUADRADO 70x70"], Viga: ["VIGA I 350", "VIGA U 10"] } },
+        { id: 10563, cliente: "União Metálica", status: "Aguardando separação", endereco: "Rua das Flores, 45 - Serra, ES", embarque: "Serra", motorista: "motorista3", produtos: { Chapa: ["CHAPA PRETA 1/2", "CHAPA GALVANIZADA 2mm"], Tubo: ["TUBO REDONDO 4", "TUBO QUADRADO 70x70"], Viga: ["VIGA I 350", "VIGA U 10"] } },
         { id: 10564, cliente: "Expresso Cargas", status: "Aguardando separação", endereco: "BR-101 Norte, KM 50 - Aracruz, ES", embarque: "#25695", motorista: "motorista1", produtos: { Tubo: ["TUBO RETANGULAR 50x30", "TUBO ZINCADO 2"], Viga: ["VIGA H 220", "VIGA LAMINADA 250"] } },
         { id: 10565, cliente: "Soluções em Aço", status: "Aguardando separação", endereco: "Rua do Progresso, 200 - Guarapari, ES", embarque: "#25696", motorista: "motorista2", produtos: { Chapa: ["CHAPA INOX 430", "CHAPA XADREZ 3/8"], Viga: ["VIGA CAIXÃO PEQUENA"] } },
         { id: 10566, cliente: "Estrutura Forte", status: "Aguardando separação", endereco: "Av. das Américas, 100 - Linhares, ES", embarque: "#25693", motorista: "motorista3", produtos: { Tubo: ["TUBO REDONDO 1", "TUBO INDUSTRIAL 5"], Chapa: ["CHAPA PRETA 1/8"] } },
@@ -997,7 +1113,7 @@
         { id: 10568, cliente: "Norte Aço", status: "Aguardando separação", endereco: "Rodovia ES-010, KM 5 - Fundão, ES", embarque: "#25698", motorista: "motorista2", produtos: { Tubo: ["TUBO QUADRADO 60x60"], Chapa: ["CHAPA FINA FRIA 0.5mm", "CHAPA DE BRONZE"] } },
         { id: 10569, cliente: "Leste Ferro", status: "Aguardando separação", endereco: "Rua Central, 30 - Cachoeiro de Itapemirim, ES", embarque: "#25699", motorista: "motorista3", produtos: { Viga: ["VIGA H 100"], Chapa: ["CHAPA ANTIDERRAPANTE 3mm"] } },
         { id: 10570, cliente: "Centro Metal", status: "Aguardando separação", endereco: "Av. Getúlio Vargas, 15 - Castelo, ES", embarque: "#25700", motorista: "motorista1", produtos: { Tubo: ["TUBO REDONDO 2 1/2", "TUBO ESTRUTURAL 80x80"], Chapa: ["CHAPA LISA 1/8", "CHAPA PERFURADA 5mm"] } },
-        { id: 10571, cliente: "Metalúrgica do Aço", status: "Aguardando separação", endereco: "Rua do Sol, 10 - Serra, ES", embarque: "#25689", motorista: "motorista2", produtos: { Chapa: ["CHAPA 1/4", "CHAPA INOX 316"], Viga: ["VIGA I 100"] } },
+        { id: 10571, cliente: "Metalúrgica do Aço", status: "Aguardando separação", endereco: "Rua do Sol, 10 - Serra, ES", embarque: "Serra", motorista: "motorista2", produtos: { Chapa: ["CHAPA 1/4", "CHAPA INOX 316"], Viga: ["VIGA I 100"] } },
         { id: 10572, cliente: "Construções Modernas", status: "Aguardando separação", endereco: "Av. da Praia, 50 - Vila Velha, ES", embarque: "#25690", motorista: "motorista3", produtos: { Tubo: ["TUBO REDONDO 1", "TUBO INDUSTRIAL 2"], Chapa: ["CHAPA GALVANIZADA 3mm"] } },
         { id: 10573, cliente: "Estruturas Metálicas", status: "Aguardando separação", endereco: "Rua da Paz, 200 - Cariacica, ES", embarque: "#25691", motorista: "motorista1", produtos: { Viga: ["VIGA U 6", "VIGA H 200"], Tubo: ["TUBO QUADRADO 30x30"] } },
         { id: 10574, cliente: "Galvanização Brasil", status: "Aguardando separação", endereco: "Rodovia do Ferro, 700 - Linhares, ES", embarque: "#25693", motorista: "motorista2", produtos: { Chapa: ["CHAPA GALVANIZADA 1/2"], Tubo: ["TUBO RETANGULAR 40x20"] } },
@@ -1011,6 +1127,8 @@
     const localStorageCertificadoKey = "dadosCertificadoGlobal";
     const localStorageSetorEnviadoKey = "pedidoEnviadoPorSetor";
     const localStoragePedidoStatusKey = "pedidoStatus";
+    const localStoragePedidoCarregadoKey = "pedidoCarregadoStatus"; 
+    const localStorageObservacaoCarregamentoKey = "observacaoCarregamento"; 
 
     let globalFiltroPedido = "";
     let globalFiltroRota = "todas";
@@ -1044,7 +1162,28 @@
             renderizarPedidosPorSetor(pedidoUnicoVisualizado);
             exibirCotasPorEmbarque(pedidoUnicoVisualizado);
         }
+        if (document.getElementById("loaderOrdersScreen").style.display === "flex") {
+            renderizarPedidosCarregamento();
+        }
     }
+
+    function getPedidoCarregadoStatus(id) {
+        return localStorage.getItem(`${localStoragePedidoCarregadoKey}_${id}`) || "pendente"; 
+    }
+
+    function setPedidoCarregadoStatus(id, status) {
+        localStorage.setItem(`${localStoragePedidoCarregadoKey}_${id}`, status);
+        renderizarPedidosCarregamento(); 
+    }
+
+    function getObservacaoCarregamento(id) {
+        return localStorage.getItem(`${localStorageObservacaoCarregamentoKey}_${id}`) || "";
+    }
+
+    function setObservacaoCarregamento(id, observacao) {
+        localStorage.setItem(`${localStorageObservacaoCarregamentoKey}_${id}`, observacao);
+    }
+
 
     function getDadosPesoPedido(id) {
         return JSON.parse(localStorage.getItem(`${localStorageDadosPesoKey}_${id}`)) || {};
@@ -1094,7 +1233,7 @@
         document.getElementById("driverLoginPage").style.display = "none";
         document.getElementById("filterScreen").style.display = "none";
         document.getElementById("mainApp").style.display = "none";
-        document.getElementById("materialSelectionPage").style.display = "flex"; 
+        document.getElementById("materialSelectionPage").style.display = "none"; 
         isMotoristaLogado = false;
         selectedUserType = null;
     }
@@ -1118,7 +1257,7 @@ function continueToNextScreen() {
     } else if (selectedUserType === 'motorista') {
         showDriverLoginPage();
     } else {
-        alert("Por favor, selecione seu tipo de serviço para continuar.");
+        showModal("Atenção", "Por favor, selecione seu tipo de serviço para continuar.", `<button class="modal-button ok" onclick="closeModal()">OK</button>`);
     }
 }
 
@@ -1149,7 +1288,7 @@ function showMaterialSelectionPage() {
 
 function showFilterScreen() {
     hideAllScreens();
-    document.getElementById("filterScreen").style.display = "block";
+    document.getElementById("filterScreen").style.display = "flex"; 
 }
 
 function showMainApp() {
@@ -1164,6 +1303,10 @@ function hideAllScreens() {
     document.getElementById("filterScreen").style.display = "none";
     document.getElementById("mainApp").style.display = "none";
     document.getElementById("materialSelectionPage").style.display = "none";
+    const rolePage = document.getElementById("operatorRoleSelectionPage");
+    if (rolePage) rolePage.style.display = "none";
+    const loaderPage = document.getElementById("loaderOrdersScreen");
+    if (loaderPage) loaderPage.style.display = "none";
 }
 
     function fazerLogin() {
@@ -1192,9 +1335,6 @@ function hideAllScreens() {
         }
     }
     
-
-
-
     function fazerLoginMotorista() {
         const user = document.getElementById("driverUsername").value.trim();
         const pass = document.getElementById("driverPassword").value.trim();
@@ -1207,13 +1347,11 @@ function hideAllScreens() {
             isMotoristaLogado = true;
             document.getElementById("driverLoginPage").style.display = "none";
             document.getElementById("resetDataButton").style.display = "none";
-            exibirResumoEmbarques();
-            showFilterScreen(); 
+            showLoadingOrdersScreen(); 
         } else {
-            erro.textContent = "Usuário ou senha incorretos ou não é um motorista.";
+            erro.textContent = "Usuário ou senha incorretos ou não é um Operador de Carregamento.";
         }
     }
-        showMainApp();  
 
 
     function selectMaterialType(type) {
@@ -1246,8 +1384,7 @@ function hideAllScreens() {
         
 
         renderizarPedidosPorSetor(pedidoUnicoVisualizado);
-        exibirCotasPorEmbarque(pedidoUnicoVisualizado);
-
+        
         const statusButtons = document.querySelectorAll('#mainAppStatusFilters button');
         statusButtons.forEach(button => {
             if (button.dataset.statusFilter === globalFiltroStatus) { 
@@ -1299,15 +1436,14 @@ function hideAllScreens() {
             const rotaCorresponde = globalFiltroRota === "todas" || pedido.embarque === globalFiltroRota;
             const pedidoCorresponde = !idPedidoEspecifico || pedido.id === idPedidoEspecifico;
 
-            const pertenceAoMotorista = isMotoristaLogado ? pedido.motorista === usuarioLogado : true;
-            const pertenceAoOperador = !isMotoristaLogado && ["admin", "operador1", "operador2", "operador3", "joao"].includes(usuarioLogado.toLowerCase());
+            const pertenceAoOperador = ["admin", "operador1", "operador2", "operador3", "joao"].includes(usuarioLogado.toLowerCase());
 
             const materialCorresponde = globalFiltroMaterial === "Todos" || 
                 (globalFiltroMaterial === "Chapa" && pedido.produtos["Chapa"]) ||
                 (globalFiltroMaterial === "Viga" && pedido.produtos["Viga"]) || 
                 (globalFiltroMaterial === "Tubo" && pedido.produtos["Tubo"]);
 
-            return statusCorresponde && rotaCorresponde && pedidoCorresponde && (isMotoristaLogado ? pertenceAoMotorista : pertenceAoOperador) && materialCorresponde;
+            return statusCorresponde && rotaCorresponde && pedidoCorresponde && pertenceAoOperador && materialCorresponde;
         });
 
         if (pedidosFiltrados.length === 0) {
@@ -1344,149 +1480,131 @@ function hideAllScreens() {
 
             const sortedSectors = Object.keys(pedido.produtos).sort();
 
-            if (isMotoristaLogado) {
+            const isAdmin = usuarioLogado.toLowerCase() === "admin";
+            sortedSectors.forEach(setor => {
+                const isUserSetor = usuarioLogado.toLowerCase() === setor.toLowerCase();
+                const isSetorAlreadySent = isSetorEnviado(pedido.id, setor);
+
+                if (globalFiltroMaterial !== "Todos" && setor !== globalFiltroMaterial) {
+                    return;
+                }
+
+                const userCanViewSetor = true; 
+                
+                if (!userCanViewSetor) {
+                    return;
+                }
+
                 const setorDiv = document.createElement("div");
-                setorDiv.innerHTML = `<h4>Itens do Pedido:</h4>`;
-                const itemList = document.createElement("ul");
-                itemList.classList.add("driver-item-list");
+                setorDiv.innerHTML = `<h4>Setor: ${setor}</h4>`;
 
-                sortedSectors.forEach(setor => {
-                    if (globalFiltroMaterial !== "Todos" && setor !== globalFiltroMaterial) {
-                        return;
-                    }
-                    pedido.produtos[setor].forEach(produto => {
-                        const item = document.createElement("li");
-                        item.textContent = produto;
-                        itemList.appendChild(item);
-                    });
-                });
-                setorDiv.appendChild(itemList);
-                pedidoCard.appendChild(setorDiv);
-
-            } else {
-                const isAdmin = usuarioLogado.toLowerCase() === "admin";
-                sortedSectors.forEach(setor => {
-                    const isUserSetor = usuarioLogado.toLowerCase() === setor.toLowerCase();
-                    const isSetorAlreadySent = isSetorEnviado(pedido.id, setor);
-
-                    if (globalFiltroMaterial !== "Todos" && setor !== globalFiltroMaterial) {
-                        return;
-                    }
-
-                    const userCanViewSetor = true;
-                    
-                    if (!userCanViewSetor) {
-                        return;
-                    }
-
-                    const setorDiv = document.createElement("div");
-                    setorDiv.innerHTML = `<h4>Setor: ${setor}</h4>`;
-
-                    pedido.produtos[setor].forEach(produto => {
-                        const peso = getDadosPesoPedido(pedido.id)[produto] !== undefined ? getDadosPesoPedido(pedido.id)[produto] : '';
-                        const certificado = getDadosCertificadoPedido(pedido.id)[produto] !== undefined ? getDadosCertificadoPedido(pedido.id)[produto] : '';
-                        setorDiv.innerHTML += `
-                            <div class="item">
-                                <span>${produto}:</span>
-                                <div>
-                                    <input
-                                        type="number"
-                                        step="5"
-                                        placeholder="Peso (kg)*"
-                                        value="${peso}"
-                                        id="peso-${pedido.id}-${setor}-${produto.replace(/\s/g, '-')}"
-                                        ${isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação" ? 'disabled' : ''}
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Certificado*"
-                                        value="${certificado}"
-                                        id="certificado-${pedido.id}-${setor}-${produto.replace(/\s/g, '-')}"
-                                        ${isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação" ? 'disabled' : ''}
-                                        style="margin-left: 10px; width: 220px;"
-                                    />
-                                </div>
+                pedido.produtos[setor].forEach(produto => {
+                    const peso = getDadosPesoPedido(pedido.id)[produto] !== undefined ? getDadosPesoPedido(pedido.id)[produto] : '';
+                    const certificado = getDadosCertificadoPedido(pedido.id)[produto] !== undefined ? getDadosCertificadoPedido(pedido.id)[produto] : '';
+                    setorDiv.innerHTML += `
+                        <div class="item">
+                            <span>${produto}:</span>
+                            <div>
+                                <input
+                                    type="number"
+                                    step="5"
+                                    placeholder="Peso (kg)*"
+                                    value="${peso}"
+                                    id="peso-${pedido.id}-${setor}-${produto.replace(/\s/g, '-')}"
+                                    ${isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação" ? 'disabled' : ''}
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Certificado*"
+                                    value="${certificado}"
+                                    id="certificado-${pedido.id}-${setor}-${produto.replace(/\s/g, '-')}"
+                                    ${isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação" ? 'disabled' : ''}
+                                    style="margin-left: 10px; width: 220px;"
+                                />
                             </div>
-                        `;
+                        </div>
+                    `;
+                });
+
+                const buttonRow = document.createElement("div");
+                buttonRow.classList.add("buttons-row");
+
+                const btnIniciarSeparacao = document.createElement("button");
+                btnIniciarSeparacao.textContent = `Iniciar Separação (${setor})`;
+                btnIniciarSeparacao.classList.add("btn-iniciar-separacao");
+                btnIniciarSeparacao.disabled = isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Aguardando separação";
+                btnIniciarSeparacao.onclick = () => {
+                    confirmarAcao(
+                        `Iniciar Separação para ${setor}?`,
+                        `Você está prestes a iniciar a separação do setor de ${setor} para a COT_${pedido.id}. O status do pedido será atualizado para "Em separação". Confirma?`,
+                        () => {
+                            setPedidoStatus(pedido.id, "Em separação");
+                            renderizarPedidosPorSetor(idPedidoEspecifico);
+                        }
+                    );
+                };
+                buttonRow.appendChild(btnIniciarSeparacao);
+
+                const btnSalvarPesos = document.createElement("button");
+                btnSalvarPesos.textContent = `Salvar Pesos (${setor})`;
+                btnSalvarPesos.classList.add("btn-salvar-peso");
+                btnSalvarPesos.disabled = isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação";
+                btnSalvarPesos.onclick = () => salvarTodosPesosDoSetor(pedido.id, setor, pedido.produtos[setor], idPedidoEspecifico);
+                buttonRow.appendChild(btnSalvarPesos);
+
+                const btnEnviar = document.createElement("button");
+                btnEnviar.textContent = `Enviar (${setor})`;
+                btnEnviar.classList.add("btn-enviar");
+                btnEnviar.disabled = isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação";
+                btnEnviar.onclick = () => {
+                    let allWeightsEntered = true;
+                    pedido.produtos[setor].forEach(produto => {
+                        const pesoInput = document.getElementById(`peso-${pedido.id}-${setor}-${produto.replace(/\s/g, '-')}`);
+                        const certificadoInput = document.getElementById(`certificado-${pedido.id}-${setor}-${produto.replace(/\s/g, '-')}`);
+                        if (pesoInput && (pesoInput.value === '' || parseFloat(pesoInput.value) <= 0)) {
+                            allWeightsEntered = false;
+                        }
+                        if (certificadoInput && certificadoInput.value.trim() === '') {
+                            allWeightsEntered = false;
+                        }
                     });
 
-                    const buttonRow = document.createElement("div");
-                    buttonRow.classList.add("buttons-row");
-
-                    const btnIniciarSeparacao = document.createElement("button");
-                    btnIniciarSeparacao.textContent = `Iniciar Separação (${setor})`;
-                    btnIniciarSeparacao.classList.add("btn-iniciar-separacao");
-                    btnIniciarSeparacao.disabled = isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Aguardando separação";
-                    btnIniciarSeparacao.onclick = () => {
-                        confirmarAcao(
-                            `Iniciar Separação para ${setor}?`,
-                            `Você está prestes a iniciar a separação do setor de ${setor} para a COT_${pedido.id}. O status do pedido será atualizado para "Em separação". Confirma?`,
-                            () => {
-                                setPedidoStatus(pedido.id, "Em separação");
-                                renderizarPedidosPorSetor(idPedidoEspecifico);
-                            }
+                    if (!allWeightsEntered) {
+                        showModal(
+                            "Erro de Validação",
+                            "Por favor, preencha o peso e o certificado para todos os produtos antes de enviar o setor.",
+                            `<button class="modal-button ok" onclick="closeModal()">OK</button>`
                         );
-                    };
-                    buttonRow.appendChild(btnIniciarSeparacao);
+                        return;
+                    }
 
-                    const btnSalvarPesos = document.createElement("button");
-                    btnSalvarPesos.textContent = `Salvar Pesos (${setor})`;
-                    btnSalvarPesos.classList.add("btn-salvar-peso");
-                    btnSalvarPesos.disabled = isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação";
-                    btnSalvarPesos.onclick = () => salvarTodosPesosDoSetor(pedido.id, setor, pedido.produtos[setor], idPedidoEspecifico);
-                    buttonRow.appendChild(btnSalvarPesos);
-
-                    const btnEnviar = document.createElement("button");
-                    btnEnviar.textContent = `Enviar (${setor})`;
-                    btnEnviar.classList.add("btn-enviar");
-                    btnEnviar.disabled = isPedidoSeparado || isSetorAlreadySent || statusAtual !== "Em separação";
-                    btnEnviar.onclick = () => {
-                        let allWeightsEntered = true;
-                        pedido.produtos[setor].forEach(produto => {
-                            const pesoInput = document.getElementById(`peso-${pedido.id}-${setor}-${produto.replace(/\s/g, '-')}`);
-                            if (pesoInput && (pesoInput.value === '' || parseFloat(pesoInput.value) <= 0)) {
-                                allWeightsEntered = false;
+                    confirmarAcao(
+                        `Confirmar Envio para ${setor}?`,
+                        `Você está prestes a finalizar o envio do setor de ${setor} para a COT_${pedido.id}. Confirma?`,
+                        () => {
+                            setSetorEnviado(pedido.id, setor);
+                            if (verificarTodosSetoresEnviados(pedido.id)) {
+                                setPedidoStatus(pedido.id, "Pedido separado");
+                                showModal(
+                                    "Pedido Completo!",
+                                    `Todos os setores da COT_${pedido.id} foram enviados, e o status foi atualizado para "Pedido Separado".`,
+                                    `<button class="modal-button ok" onclick="closeModal()">OK</button>`
+                                );
+                            } else {
+                                showModal(
+                                    "Setor Enviado!",
+                                    `O setor de ${setor} da COT_${pedido.id} foi marcado como enviado. Outros setores ainda estão pendentes.`,
+                                    `<button class="modal-button ok" onclick="closeModal()">OK</button>`
+                                );
                             }
-                                
-                        });
-
-                        if (!allWeightsEntered) {
-                            showModal(
-                                "Erro de Validação",
-                                "Por favor, preencha o peso e o certificado para todos os produtos antes de enviar o setor.",
-                                `<button class="modal-button ok" onclick="closeModal()">OK</button>`
-                            );
-                            return;
+                            renderizarPedidosPorSetor(idPedidoEspecifico);
                         }
-
-                        confirmarAcao(
-                            `Confirmar Envio para ${setor}?`,
-                            `Você está prestes a finalizar o envio do setor de ${setor} para a COT_${pedido.id}. Confirma?`,
-                            () => {
-                                setSetorEnviado(pedido.id, setor);
-                                if (verificarTodosSetoresEnviados(pedido.id)) {
-                                    setPedidoStatus(pedido.id, "Pedido separado");
-                                    showModal(
-                                        "Pedido Completo!",
-                                        `Todos os setores da COT_${pedido.id} foram enviados, e o status foi atualizado para "Pedido Separado".`,
-                                        `<button class="modal-button ok" onclick="closeModal()">OK</button>`
-                                    );
-                                } else {
-                                    showModal(
-                                        "Setor Enviado!",
-                                        `O setor de ${setor} da COT_${pedido.id} foi marcado como enviado. Outros setores ainda estão pendentes.`,
-                                        `<button class="modal-button ok" onclick="closeModal()">OK</button>`
-                                    );
-                                }
-                                renderizarPedidosPorSetor(idPedidoEspecifico);
-                            }
-                        );
-                    };
-                    buttonRow.appendChild(btnEnviar);
-                    setorDiv.appendChild(buttonRow);
-                    pedidoCard.appendChild(setorDiv);
-                });
-            }
+                    );
+                };
+                buttonRow.appendChild(btnEnviar);
+                setorDiv.appendChild(buttonRow);
+                pedidoCard.appendChild(setorDiv);
+            });
             pedidosPorSetorDiv.appendChild(pedidoCard);
         });
         document.getElementById("pedidosPorSetor").scrollTop = 0;
@@ -1516,6 +1634,9 @@ function hideAllScreens() {
 
             if (certificadoInput && !certificadoInput.disabled) {
                 const certificado = certificadoInput.value.trim();
+                if (certificado === '') { 
+                    validationError = true;
+                }
                 if (dadosCertificado[produto] === undefined || dadosCertificado[produto] !== certificado) {
                     dadosCertificado[produto] = certificado;
                     inputsAtualizados++;
@@ -1526,7 +1647,7 @@ function hideAllScreens() {
         if (validationError) {
             showModal(
                 "Erro de Validação",
-                "Por favor, insira um peso válido (número maior que zero) para todos os produtos antes de salvar.",
+                "Por favor, insira um peso válido (número maior que zero) e um certificado para todos os produtos antes de salvar.",
                 `<button class="modal-button ok" onclick="closeModal()">OK</button>`
             );
             return;
@@ -1557,11 +1678,7 @@ function hideAllScreens() {
         const resumo = {};
 
         let pedidosFiltrados;
-        if (isMotoristaLogado) {
-            pedidosFiltrados = pedidos.filter(p => p.motorista === usuarioLogado);
-        } else {
-            pedidosFiltrados = pedidos.filter(p => true);
-        }
+        pedidosFiltrados = pedidos.filter(p => true);
 
         const regionColors = {
             'Cariacica, ES': 'red',
@@ -1583,7 +1700,7 @@ function hideAllScreens() {
             const status = getPedidoStatus(pedido.id);
             const materialCorresponde = globalFiltroMaterial === "Todos" || Object.keys(pedido.produtos).includes(globalFiltroMaterial);
 
-            if (status !== "Pedido separado" && materialCorresponde) {
+            if (status !== "Pedido separado" && materialCorresponde) { 
                 const embarque = pedido.embarque;
                 if (!resumo[embarque]) {
                     resumo[embarque] = { count: 0, color: '' };
@@ -1708,20 +1825,7 @@ function hideAllScreens() {
             return;
         }
 
-        if (cotasDoEmbarque.length > 0) {
-            cotasDoEmbarque.forEach((cota, index) => {
-                const itemDiv = document.createElement("div");
-                itemDiv.classList.add("quotation-item");
-                itemDiv.innerHTML = `
-                    <span>${cota}</span>
-                    <button onclick="selecionarCota('${cota}')">Selecionar</button>
-                `;
-                quotationListDiv.appendChild(itemDiv);
-            });
-            quotationsSection.style.display = "block";
-        } else {
-            quotationsSection.style.display = "none";
-        }
+        quotationsSection.style.display = "none"; 
     }
 
     function confirmResetAllData() {
@@ -1745,7 +1849,9 @@ function hideAllScreens() {
             if (key.startsWith(localStorageDadosPesoKey) ||
                 key.startsWith(localStorageCertificadoKey) ||
                 key.startsWith(localStorageSetorEnviadoKey) ||
-                key.startsWith(localStoragePedidoStatusKey)) {
+                key.startsWith(localStoragePedidoStatusKey) ||
+                key.startsWith(localStoragePedidoCarregadoKey) || 
+                key.startsWith(localStorageObservacaoCarregamentoKey)) { 
                 keysToRemove.push(key);
             }
         }
@@ -1765,6 +1871,188 @@ function hideAllScreens() {
     document.addEventListener("DOMContentLoaded", () => {
         showUserSelectionPage();
     });
+
+
+
+function showLoadingOrdersScreen() {
+    hideAllScreens();
+    document.getElementById("loaderOrdersScreen").style.display = "flex";
+    renderizarPedidosCarregamento();
+}
+
+function renderizarPedidosCarregamento() {
+    const listDiv = document.getElementById("loadingOrdersList");
+    listDiv.innerHTML = "";
+
+    const pedidosParaCarregar = pedidos.filter(p => 
+        (getPedidoStatus(p.id) === "Pedido separado" || 
+         getPedidoCarregadoStatus(p.id) === "carregado" ||
+         getPedidoCarregadoStatus(p.id) === "nao-carregado") && 
+        p.motorista === usuarioLogado
+    );
+
+    if (pedidosParaCarregar.length === 0) {
+        listDiv.innerHTML = "<p style='text-align:center; color:var(--text-secondary)'>Nenhum pedido aguardando carregamento para sua rota.</p>";
+        return;
+    }
+
+    const pedidosPorEmbarque = pedidosParaCarregar.reduce((acc, pedido) => {
+        if (!acc[pedido.embarque]) {
+            acc[pedido.embarque] = [];
+        }
+        acc[pedido.embarque].push(pedido);
+        return acc;
+    }, {});
+
+    const embarquesOrdenados = Object.keys(pedidosPorEmbarque).sort();
+
+    embarquesOrdenados.forEach(embarque => {
+        const embarqueGroupDiv = document.createElement("div");
+        embarqueGroupDiv.classList.add("embarque-group");
+        embarqueGroupDiv.innerHTML = `<h3>Embarque: ${embarque}</h3>`;
+
+        pedidosPorEmbarque[embarque].forEach(pedido => {
+            const pedidoCarregadoStatus = getPedidoCarregadoStatus(pedido.id);
+            const observacaoCarregamento = getObservacaoCarregamento(pedido.id);
+
+            let statusClass = '';
+            let statusText = '';
+            
+            if (pedidoCarregadoStatus === 'carregado') {
+                statusClass = 'status-carregado';
+                statusText = 'Carregado';
+            } else if (pedidoCarregadoStatus === 'nao-carregado') {
+                statusClass = 'status-nao-carregado';
+                statusText = 'Não Carregado';
+            } else {
+                statusClass = 'status-pedido-separado';
+                statusText = 'Aguardando carregamento';
+            }
+
+            const card = document.createElement("div");
+            card.classList.add("card");
+            card.setAttribute("data-pedido-id", pedido.id);
+            card.innerHTML = `
+                <div class="pedido-header">
+                    <h3>COT_${pedido.id} - ${pedido.cliente}</h3>
+                    <p>Endereço: ${pedido.endereco}</p>
+                    <p class="status-pedido ${statusClass}">Status: ${statusText}</p>
+                </div>
+            `;
+
+            Object.keys(pedido.produtos).forEach(setor => {
+                const setorDiv = document.createElement("div");
+                setorDiv.innerHTML = `<h4>Setor: ${setor}</h4>`;
+                pedido.produtos[setor].forEach(item => {
+                    const itemId = `item-${pedido.id}-${setor}-${item.replace(/\s/g, '-')}`;
+                    const isChecked = localStorage.getItem(itemId) === 'true'; 
+                    setorDiv.innerHTML += `
+                        <div class="item">
+                            <span>${item}</span>
+                            <input type="checkbox" id="${itemId}" ${isChecked ? 'checked' : ''} 
+                                ${pedidoCarregadoStatus !== 'pendente' ? 'disabled' : ''}
+                                onclick="toggleItemCarregado(${pedido.id}, '${setor}', '${item.replace(/\s/g, '-')}')">
+                        </div>
+                    `;
+                });
+                card.appendChild(setorDiv);
+            });
+
+            const loaderButtonsDiv = document.createElement("div");
+            loaderButtonsDiv.classList.add("loader-buttons");
+
+            const btnCarregado = document.createElement("button");
+            btnCarregado.textContent = "Marcar como Carregado";
+            btnCarregado.classList.add("btn-carregado");
+            btnCarregado.disabled = pedidoCarregadoStatus !== 'pendente';
+            btnCarregado.onclick = () => marcarPedidoCarregado(pedido.id);
+            loaderButtonsDiv.appendChild(btnCarregado);
+
+            const btnNaoCarregado = document.createElement("button");
+            btnNaoCarregado.textContent = "Marcar como Não Carregado";
+            btnNaoCarregado.classList.add("btn-nao-carregado");
+            btnNaoCarregado.disabled = pedidoCarregadoStatus !== 'pendente';
+            btnNaoCarregado.onclick = () => showObservacaoModal(pedido.id);
+            loaderButtonsDiv.appendChild(btnNaoCarregado);
+
+            card.appendChild(loaderButtonsDiv);
+
+            if (pedidoCarregadoStatus === 'nao-carregado' && observacaoCarregamento) {
+                const obsDiv = document.createElement("div");
+                obsDiv.classList.add("observacao-nao-carregado");
+                obsDiv.style.display = 'block';
+                obsDiv.innerHTML = `<p><strong>Observação:</strong> ${observacaoCarregamento}</p>`;
+                card.appendChild(obsDiv);
+            }
+
+            embarqueGroupDiv.appendChild(card);
+        });
+        listDiv.appendChild(embarqueGroupDiv);
+    });
+}
+
+function toggleItemCarregado(pedidoId, setor, itemSlug) {
+    const itemId = `item-${pedidoId}-${setor}-${itemSlug}`;
+    const checkbox = document.getElementById(itemId);
+    localStorage.setItem(itemId, checkbox.checked ? 'true' : 'false');
+}
+
+function marcarPedidoCarregado(pedidoId) {
+    const pedido = pedidos.find(p => p.id === pedidoId);
+    let allItemsChecked = true;
+    if (pedido) {
+        for (const setor in pedido.produtos) {
+            pedido.produtos[setor].forEach(item => {
+                const itemId = `item-${pedido.id}-${setor}-${item.replace(/\s/g, '-')}`;
+                if (localStorage.getItem(itemId) !== 'true') {
+                    allItemsChecked = false;
+                }
+            });
+        }
+    }
+
+    if (!allItemsChecked) {
+        showModal("Atenção", "Por favor, marque todos os itens do pedido como carregados antes de finalizar.", `<button class="modal-button ok" onclick="closeModal()">OK</button>`);
+        return;
+    }
+
+    confirmarAcao(
+        "Confirmar Carregamento?",
+        `Você está prestes a marcar a COT_${pedidoId} como "Carregado". Confirma?`,
+        () => {
+            setPedidoCarregadoStatus(pedidoId, "carregado");
+            setObservacaoCarregamento(pedidoId, ""); 
+            showModal("Sucesso", `Pedido COT_${pedidoId} marcado como "Carregado".`, `<button class="modal-button ok" onclick="closeModal()">OK</button>`);
+        }
+    );
+}
+
+function showObservacaoModal(pedidoId) {
+    const currentObs = getObservacaoCarregamento(pedidoId);
+    showModal(
+        "Motivo Não Carregado",
+        `
+        <p>Por favor, informe o motivo pelo qual a COT_${pedidoId} não foi carregada:</p>
+        <textarea id="observacaoNaoCarregado" placeholder="Descreva o motivo..." rows="4">${currentObs}</textarea>
+        `,
+        `
+        <button class="modal-button cancel" onclick="closeModal()">Cancelar</button>
+        <button class="modal-button confirm" onclick="salvarObservacaoNaoCarregado(${pedidoId})">Salvar</button>
+        `
+    );
+}
+
+function salvarObservacaoNaoCarregado(pedidoId) {
+    const observacao = document.getElementById("observacaoNaoCarregado").value.trim();
+    if (observacao === "") {
+        showModal("Atenção", "Por favor, preencha o motivo para não carregamento.", `<button class="modal-button ok" onclick="closeModal()">OK</button>`);
+        return;
+    }
+    setObservacaoCarregamento(pedidoId, observacao);
+    setPedidoCarregadoStatus(pedidoId, "nao-carregado");
+    closeModal();
+    showModal("Sucesso", `Pedido COT_${pedidoId} marcado como "Não Carregado" com observação.`, `<button class="modal-button ok" onclick="closeModal()">OK</button>`);
+}
 
 </script>
 
