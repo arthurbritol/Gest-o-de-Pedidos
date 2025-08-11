@@ -1020,10 +1020,6 @@ function marcarPedidoCarregado(pedidoId) {
         }
     }
 
-    if (!allItemsChecked) {
-        showModal("Atenção", "Por favor, marque todos os itens do pedido como carregados antes de finalizar.", `<button class="modal-button ok" onclick="closeModal()">OK</button>`);
-        return;
-    }
 
     confirmarAcao(
         "Confirmar Carregamento?",
