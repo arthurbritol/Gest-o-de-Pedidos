@@ -891,3 +891,71 @@
     border-bottom: 2px solid var(--primary-blue);
     padding-bottom: 10px;
 }
+
+
+.embarque-summary-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.embarque-summary-card {
+    flex: 1;
+    min-width: 300px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.embarque-status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.loader-status-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.loader-status-filters button {
+    background-color: var(--medium-gray);
+    color: var(--dark-gray);
+    border: 1px solid #d0d7e0;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 1px 4px var(--shadow-light);
+}
+
+.loader-status-filters button:hover {
+    background-color: #dbe4ec;
+    transform: translateY(-1px);
+}
+
+.loader-status-filters button.active {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-color: var(--primary-blue);
+    font-weight: 600;
+    box-shadow: 0 3px 9px rgba(0, 123, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+#loaderOrdersScreen .loader-buttons .btn-destinar {
+    background-color: var(--blue-info);
+    color: var(--white);
+    border: none;
+}
+
+#loaderOrdersScreen .loader-buttons .btn-destinar:hover {
+    background-color: #117a8b;
+}
