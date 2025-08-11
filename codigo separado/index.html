@@ -9,7 +9,7 @@
     <link rel="shortcut icon" type="image/jpg" href="/images/favicon.ico"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    
+
 </head>
 <body>
 <div class="user-selection-container" id="userSelectionPage">
@@ -110,12 +110,12 @@
             <h3>Resumo de Pedidos por Embarque</h3>
             <div id="embarqueSummary"></div>
             <button onclick="viewPedidosFromSummary('')" class="filter-box-button-bottom">Ver Todos os Pedidos</button>
-        </div>    
+        </div>
 
         <button class="filter-box-button-bottom" onclick="confirmResetAllData()" id="resetDataButton" style="background-color: var(--red-error); margin-top: 30px; display: block;">Zerar Todos os Dados de Pesagem</button>
 
         <button class="filter-box-button-bottom" onclick="logout()" style="background-color: var(--text-secondary); margin-top: 15px;">Sair (Logout)</button>
-    
+
     </div>
 </div>
 
@@ -123,6 +123,10 @@
 <div class="filter-screen-container" id="loaderOrdersScreen" style="display: none;">
     <div class="filter-box">
         <h2>Pedidos aguardando carregamento</h2>
+        <div class="loader-status-filters">
+            <button data-loader-filter="todos" class="active" onclick="aplicarFiltroCarregamento('todos', this)">Todos os Pedidos</button>
+            <button data-loader-filter="meus" onclick="aplicarFiltroCarregamento('meus', this)">Meus Carregamentos</button>
+        </div>
         <div id="loadingOrdersList"></div>
         <button class="filter-box-button-bottom" onclick="logout()" style="background-color: var(--text-secondary); margin-top: 15px;">Sair</button>
     </div>
