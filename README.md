@@ -1,2 +1,1 @@
-Gestao de Pedidos
-Material criado para auxilio ao sistema logístico da minha empresa.
+Código separado para melhor localização de erros e bugs.
