@@ -1068,7 +1068,7 @@ function showDestinarCarregamentoModal(pedidoId) {
     showModal(
         "Destinar Carregamento",
         `
-        <p>Selecione o Carregador para destinar o carregamento da COT_${pedidoId}:</p>
+        <p>Selecione o usuário para destinar o carregamento da COT_${pedidoId}:</p>
         <select id="selectMotoristaDestino" style="width: 100%; padding: 10px; margin-top: 15px; border-radius: 5px; border: 1px solid var(--medium-gray);">
             <option value="">Não Destinado</option>
             ${optionsHtml}
