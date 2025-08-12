@@ -1129,7 +1129,7 @@ function gerarPDF(pedidoId) {
             content += `
                 <li>
                     <strong>${produto}</strong><br>
-                    - Peso: ${peso}<br>
+                    - Peso: ${peso} Kg<br>
                     - Certificado: ${certificado}
                 </li>
             `;
@@ -1339,4 +1339,5 @@ function imprimirEtiquetas(pedidoId) {
     printWindow.document.write(etiquetaHTML);
     printWindow.document.close();
     printWindow.print();
+
 }
