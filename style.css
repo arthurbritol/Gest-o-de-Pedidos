@@ -76,7 +76,7 @@
         .login-box input, .login-box button,
         .filter-box input, .filter-box select, .filter-box button {
             width: 100%;
-            padding: 18px 0px;
+            padding: 18px 15px;
             margin-bottom: 15px;
             font-size: 17px;
             border-radius: var(--border-radius-small);
@@ -1000,4 +1000,5 @@
 
 .btn-print-etiqueta:active {
     transform: translateY(0); 
+
 }
