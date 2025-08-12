@@ -1302,6 +1302,9 @@ function imprimirEtiquetas(pedidoId) {
             contadorItens++;
             const volumeString = `${contadorItens}/${totalItens}`;
 
+            const peso = dadosPeso[produto] !== undefined ? dadosPeso[produto] : 'N/A';
+            const certificado = dadosCertificado[produto] !== undefined ? dadosCertificado[produto] : 'N/A';
+
             etiquetaHTML += `
                 <div class="etiqueta-container">
                     <div class="background-logo"></div>
@@ -1316,8 +1319,8 @@ function imprimirEtiquetas(pedidoId) {
                     </div>
                     <div class="nota-fiscal-row">
                         <div class="grid-cell">Nota fiscal</div>
-                        <div class="grid-cell">Peso</div>
-                        <div class="grid-cell">Certificado:</div>
+                        <div class="grid-cell"><span>Peso:<br><strong class="info">${peso} kg</strong></span></div>
+                        <div class="grid-cell"><span>Certificado:<br><strong class="info">${certificado}</strong></span></div>
                         <div class="grid-cell">Data Emissão NF.</div>
                     </div>
                     <div class="equip-details-section">
@@ -1339,5 +1342,4 @@ function imprimirEtiquetas(pedidoId) {
     printWindow.document.write(etiquetaHTML);
     printWindow.document.close();
     printWindow.print();
-
 }
