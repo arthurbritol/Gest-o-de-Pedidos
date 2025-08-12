@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <title>Gestão de Pedidos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="favicon.ico" type="images/x-icon">
-    <link rel="shortcut icon" type="image/jpg" href="favicon.ico"/>
+    <link rel="icon" href="IMAGES/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" type="image/jpg" href="IMAGES/favicon.ico"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 
@@ -18,7 +18,7 @@
         <h2>Qual serviço você executa?</h2>
 
         <div class="user-option" data-user-type="operador" onclick="selectUserType('operador')">
-            <img src="IMAGES/pacote.png" alt="Icone Operador" class="icon">
+            <img src="IMAGES/pacote.png" alt="Icone Separador" class="icon">
             <div class="text-content">
                 <h3>Separador</h3>
                 <p>Separar materiais e inserir pesos solicitados</p>
@@ -120,16 +120,18 @@
 </div>
 
 
-<div class="filter-screen-container" id="loaderOrdersScreen" style="display: none;">
-    <div class="filter-box">
-        <h2>Pedidos aguardando carregamento</h2>
-        <div class="loader-status-filters">
-            <button data-loader-filter="todos" class="active" onclick="aplicarFiltroCarregamento('todos', this)">Todos os Pedidos</button>
-            <button data-loader-filter="meus" onclick="aplicarFiltroCarregamento('meus', this)">Meus Carregamentos</button>
+    <div class="filter-screen-container" id="loaderOrdersScreen" style="display: none;">
+        <div class="filter-box">
+            <h2>Pedidos aguardando carregamento</h2>
+            <div class="loader-status-filters">
+                <button data-loader-filter="todos" class="active" onclick="aplicarFiltroCarregamento('todos', this)">Todos os Pedidos</button>
+                <button data-loader-filter="meus" onclick="aplicarFiltroCarregamento('meus', this)">Meus Carregamentos</button>
+            </div>
+            <div id="loadingOrdersList"></div>
+            <button class="filter-box-button-bottom" onclick="logout()" style="background-color: var(--text-secondary); margin-top: 15px;">Sair</button>
         </div>
-        <div id="loadingOrdersList"></div>
-        <button class="filter-box-button-bottom" onclick="logout()" style="background-color: var(--text-secondary); margin-top: 15px;">Sair</button>
     </div>
+</div>
 </div>
 
 <div id="mainApp">
@@ -175,12 +177,6 @@
 
 
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
-
 </html>
-
-
-
-
-
-

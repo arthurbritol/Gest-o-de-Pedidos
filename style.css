@@ -408,48 +408,6 @@
             border: 1px solid var(--medium-gray);
         }
 
-.atribuicao-embarque-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.atribuicao-embarque-container select, .atribuicao-embarque-container button {
-    padding: 8px 12px;
-    border-radius: var(--border-radius-small);
-    font-size: 14px;
-    border: 1px solid var(--medium-gray);
-    transition: all 0.3s ease;
-}
-
-.atribuicao-embarque-container select {
-    background-color: var(--white);
-    color: var(--dark-gray);
-    width: 150px;
-}
-
-.atribuicao-embarque-container button.btn-atribuir-carregador {
-    background-color: var(--primary-blue);
-    color: var(--white);
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.atribuicao-embarque-container button.btn-atribuir-carregador:hover {
-    background-color: var(--dark-blue);
-    transform: translateY(-1px);
-}
-
-.carregador-atribuido {
-    font-weight: 600;
-    color: var(--primary-blue);
-    background-color: #e6f0ff;
-    padding: 8px 12px;
-    border-radius: var(--border-radius-small);
-    border: 1px solid var(--primary-blue);
-}
-
         .summary-item:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px var(--shadow-medium);
@@ -1000,4 +958,46 @@
 
 #loaderOrdersScreen .loader-buttons .btn-destinar:hover {
     background-color: #117a8b;
+}
+
+.btn-print {
+    background-color: var(--blue-info);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px var(--shadow-light);
+}
+
+.btn-print:hover {
+    background-color: #117a8b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px var(--shadow-medium);
+}
+
+.btn-print-etiqueta {
+    background-color: #01b0c7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+    display: block; 
+    width: 100%; 
+}
+
+.btn-print-etiqueta:hover {
+    background-color: #00d5e4;
+    transform: translateY(-2px); 
+}
+
+.btn-print-etiqueta:active {
+    transform: translateY(0); 
 }
