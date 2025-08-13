@@ -1389,7 +1389,7 @@ function imprimirEtiquetas(pedidoId) {
                         <div class="grid-cell"><span>Nota Fiscal:<br><strong class="info">${notaFiscalNumero ?? '—'}</strong></span></div>
                         <div class="grid-cell"><span>Peso:<br><strong class="info">${peso} kg</strong></span></div>
                         <div class="grid-cell"><span>Certificado:<br><strong class="info">${certificado}</strong></span></div>
-                        <div class="grid-cell">Data Emissão NF.</div>
+                        <div class="grid-cell"><span>Data Emissão NF:<br><strong class="info">${diaFormatado}/${mesFormatado}/${ano}<br><strong class="info">${horaFormatada}:${minutoFormatado}:${segundoFormatado}</strong></strong></div>
                     </div>
                     <div class="equip-details-section">
                         <div class="grid-cell"><span class="label">Ponto de Descarga:</span></div>
@@ -1411,3 +1411,20 @@ function imprimirEtiquetas(pedidoId) {
     printWindow.document.close();
     printWindow.print();
 }
+
+const agora = new Date();
+
+const dia = agora.getDate();
+const mes = agora.getMonth() + 1;
+const ano = agora.getFullYear();
+const hora = agora.getHours();
+const minuto = agora.getMinutes();
+const segundo = agora.getSeconds();
+
+const adicionaZero = numero => numero < 10 ? '0' + numero : numero;
+
+const diaFormatado = adicionaZero(dia);
+const mesFormatado = adicionaZero(mes);
+const horaFormatada = adicionaZero(hora);
+const minutoFormatado = adicionaZero(minuto);
+const segundoFormatado = adicionaZero(segundo);
