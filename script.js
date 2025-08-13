@@ -68,6 +68,38 @@ function produtosParaTexto(produtos) {
 let usuarioLogado = null;
 let isMotoristaLogado = false;
 
+// Função para "escutar" o Enter na tela de Separador
+  function handleEnterSeparador(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // evita comportamento padrão (ex: submit)
+      fazerLogin(); // chama a função do login do separador
+    }
+  }
+
+  // Função para "escutar" o Enter na tela de Carregamento
+  function handleEnterCarregamento(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      fazerLoginMotorista(); // chama a função do login do motorista
+    }
+  }
+
+  // Adiciona os eventos após o DOM carregar
+  window.addEventListener('DOMContentLoaded', () => {
+    // Tela do separador
+    const username = document.getElementById('username');
+    const password = document.getElementById('password');
+    username.addEventListener('keydown', handleEnterSeparador);
+    password.addEventListener('keydown', handleEnterSeparador);
+
+    // Tela do carregamento
+    const driverUsername = document.getElementById('driverUsername');
+    const driverPassword = document.getElementById('driverPassword');
+    driverUsername.addEventListener('keydown', handleEnterCarregamento);
+    driverPassword.addEventListener('keydown', handleEnterCarregamento);
+  });
+
+
 const localStorageDadosPesoKey = "dadosPesagemGlobal";
 const localStorageCertificadoKey = "dadosCertificadoGlobal";
 const localStorageSetorEnviadoKey = "pedidoEnviadoPorSetor";
@@ -1428,3 +1460,4 @@ const mesFormatado = adicionaZero(mes);
 const horaFormatada = adicionaZero(hora);
 const minutoFormatado = adicionaZero(minuto);
 const segundoFormatado = adicionaZero(segundo);
+
