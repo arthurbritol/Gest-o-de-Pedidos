@@ -10,7 +10,7 @@ const usuarios = {
 };
 
 let pedidos = [
-    { id: 10532, cliente: "Metalúrgica Central", status: "Aguardando separação", endereco: "Rua teste, 123 - Serra, ES", embarque: "Serra", motorista: null, produtos: { Chapa: ["CHAPA 1/8", "CHAPA GALVANIZADA", "CHAPA INOX 304"], Tubo: ["TUBO RETANGULAR 40x20", "TUBO REDONDO 1 1/2", "TUBO QUADRADO 20x20"], Viga: ["VIGA U 1/4", "VIGA I 200"] } },
+    { id: 10532, cliente: "Metalúrgica Central", status: "Aguardando separação", endereco: "Rua teste, 123 - Serra, ES", embarque: "Serra", motorista: null, produtos: { Chapa: ["CHAPA 1/8", "CHAPA GALVANIZADA", "CHAPA INOX 304"], Tubo: ["TUBO RETANGULAR 40x20", "TUBO REDONDO 1 1/2", "TUBO QUADRADO 20x20"], Viga: ["VIGA U 1/4", "VIGA I 200"] } },   
     { id: 10533, cliente: "Construtora Brasil", status: "Aguardando separação", endereco: "Av. Exemplo, 456 - Vila Velha, ES", embarque: "Vila Velha", motorista: null, produtos: { Chapa: ["CHAPA 3/16", "CHAPA XADREZ 1/4"], Tubo: ["TUBO REDONDO 2", "TUBO SCHEDULE 40"] } },
     { id: 10534, cliente: "Ferro e Aço LTDA", status: "Aguardando separação", endereco: "Rua das Indústrias, 1010 - Cariacica, ES", embarque: "Cariacica", motorista: null, produtos: { Viga: ["VIGA W 2", "VIGA H 150"], Chapa: ["CHAPA XADREZ 5/16", "CHAPA LISA 1/2"], Tubo: ["TUBO QUADRADO 50x50", "TUBO REDONDO 3"] } },
     { id: 10535, cliente: "ConstruAço", status: "Aguardando separação", endereco: "Rodovia Norte-Sul, 999 - Serra, ES", embarque: "Serra", motorista: null, produtos: { Tubo: ["TUBO QUADRADO 50x50", "TUBO RETANGULAR 60x40", "TUBO CONDUITE 3/4"], Viga: ["VIGA H 200", "VIGA U 5", "VIGA LAMINADA 150"] } },
@@ -56,6 +56,15 @@ let pedidos = [
     { id: 10575, cliente: "Tubos e Conexões", status: "Aguardando separação", endereco: "Rua do Comércio, 120 - Colatina, ES", embarque: "Colatina", motorista: null, produtos: { Tubo: ["TUBO REDONDO 2", "TUBO SCHEDULE 80"], Viga: ["VIGA I 200"] } }
 ];
 
+function produtosParaTexto(produtos) {
+    let arr = [];
+    for (let categoria in produtos) {
+        let itens = produtos[categoria].join(", ");
+        arr.push(`${categoria}: ${itens}`);
+    }
+    return arr.join(" | ");
+}
+
 let usuarioLogado = null;
 let isMotoristaLogado = false;
 
@@ -67,6 +76,51 @@ const localStoragePedidoCarregadoKey = "pedidoCarregadoStatus";
 const localStorageObservacaoCarregamentoKey = "observacaoCarregamento";
 const localStoragePedidoMotoristaKey = "pedidoMotoristaDestino";
 
+const localStorageNotaFiscalKey = "pedidoNotaFiscalNumero";
+
+function getNotaFiscal(pedidoId) {
+    const pedido = pedidos.find(p => p.id === pedidoId);
+    const stored = localStorage.getItem(`${localStorageNotaFiscalKey}_${pedidoId}`);
+    if (stored) {
+        if (pedido) pedido.notaFiscal = parseInt(stored, 10);
+        return parseInt(stored, 10);
+    }
+    return pedido && pedido.notaFiscal ? pedido.notaFiscal : null;
+}
+
+function setNotaFiscal(pedidoId, numero) {
+    localStorage.setItem(`${localStorageNotaFiscalKey}_${pedidoId}`, String(numero));
+    const pedidoIndex = pedidos.findIndex(p => p.id === pedidoId);
+    if (pedidoIndex !== -1) {
+        pedidos[pedidoIndex].notaFiscal = numero;
+    }
+}
+
+function inicializarNotasFiscais() {
+    let current = NF_RANGE_START;
+    for (let i = 0; i < pedidos.length; i++) {
+        const pid = pedidos[i].id;
+        if (getNotaFiscal(pid) == null) {
+            if (current > NF_RANGE_END) {
+                console.warn("Intervalo de NF esgotado: alguns pedidos ficarão sem NF.");
+                break;
+            }
+            setNotaFiscal(pid, current);
+            current++;
+        } else {
+            const existing = getNotaFiscal(pid);
+            if (existing >= NF_RANGE_START && existing <= NF_RANGE_END) {
+                if (existing >= current) {
+                    current = existing + 1;
+            }
+        }
+    }
+}
+}
+
+const NF_RANGE_START = 222000;
+const NF_RANGE_END = 223000; 
+
 let globalFiltroPedido = "";
 let globalFiltroRota = "todas";
 let globalFiltroStatus = "todas";
@@ -76,7 +130,6 @@ let previousGlobalFiltroRota = "todas";
 let previousGlobalFiltroStatus = "todas";
 
 let globalFiltroMaterial = "Todos";
-
 
 let globalFiltroCarregamento = "todos";
 let globalFiltroMotoristaDestino = null;
@@ -137,7 +190,6 @@ function setPedidoMotoristaDestino(id, motorista) {
     renderizarPedidosCarregamento();
 }
 
-
 function getDadosPesoPedido(id) {
     return JSON.parse(localStorage.getItem(`${localStorageDadosPesoKey}_${id}`)) || {};
 }
@@ -146,6 +198,31 @@ function setDadosPesoPedido(id, dados) {
     localStorage.setItem(`${localStorageDadosPesoKey}_${id}`, JSON.stringify(dados));
 }
 
+function gerarProximaNotaFiscal() {
+    let maxNF = NF_RANGE_START - 1;
+    for (let i = 0; i < pedidos.length; i++) {
+        const nf = getNotaFiscal(pedidos[i].id);
+        if (nf !== null && nf >= NF_RANGE_START && nf <= NF_RANGE_END) {
+            if (nf > maxNF) maxNF = nf;
+        }
+    }
+    const proxima = maxNF + 1;
+    return (proxima <= NF_RANGE_END) ? proxima : null;
+}
+
+const _setDadosPesoPedidoOriginal = setDadosPesoPedido;
+setDadosPesoPedido = function(id, dados) {
+    _setDadosPesoPedidoOriginal(id, dados);
+    const novaNF = gerarProximaNotaFiscal();
+    if (novaNF !== null) {
+        setNotaFiscal(id, novaNF);
+    } else {
+        console.warn("Faixa de NF esgotada ao redefinir pesos.");
+    }
+};
+
+
+
 function getDadosCertificadoPedido(id) {
     return JSON.parse(localStorage.getItem(`${localStorageCertificadoKey}_${id}`)) || {};
 }
@@ -153,7 +230,6 @@ function getDadosCertificadoPedido(id) {
 function setDadosCertificadoPedido(id, dados) {
     localStorage.setItem(`${localStorageCertificadoKey}_${id}`, JSON.stringify(dados));
 }
-
 
 function isSetorEnviado(id, setor) {
     return localStorage.getItem(`${localStorageSetorEnviadoKey}_${id}_${setor.toLowerCase()}`) === "true";
@@ -179,7 +255,6 @@ function verificarTodosSetoresEnviados(pedidoId) {
     return true;
 }
 
-
 function showUserSelectionPage() {
     document.getElementById("userSelectionPage").style.display = "flex";
     document.getElementById("loginPage").style.display = "none";
@@ -195,7 +270,6 @@ function showUserSelectionPage() {
 let selectedUserType = null;
 let selectedMaterialType = null;
 
-
 function selectUserType(type) {
     selectedUserType = type;
     document.querySelectorAll('#userSelectionPage .user-option').forEach(option => {
@@ -203,7 +277,6 @@ function selectUserType(type) {
     });
     document.querySelector(`#userSelectionPage .user-option[data-user-type="${type}"]`).classList.add('selected');
 }
-
 
 function continueToNextScreen() {
     if (selectedUserType === 'operador') {
@@ -214,7 +287,6 @@ function continueToNextScreen() {
         showModal("Atenção", "Por favor, selecione seu tipo de serviço para continuar.", `<button class="modal-button ok" onclick="closeModal()">OK</button>`);
     }
 }
-
 
 function showUserSelectionPage() {
     hideAllScreens();
@@ -307,7 +379,6 @@ function fazerLoginMotorista() {
     }
 }
 
-
 function selectMaterialType(type) {
     selectedMaterialType = type;
     document.querySelectorAll('#materialSelectionPage .user-option').forEach(option => {
@@ -326,7 +397,6 @@ function continueToFilterScreen() {
     showFilterScreen();
 }
 
-
 window.onload = showUserSelectionPage;
 
 function showMainAppScreen() {
@@ -335,7 +405,6 @@ function showMainAppScreen() {
     document.getElementById("welcomeMessage").textContent = `Bem-vindo, ${usuarioLogado}!`;
     document.getElementById("mainAppStatusFilters").style.display = isMotoristaLogado ? "none" : "flex";
     document.getElementById("backToAllOrdersButton").style.display = (pedidoUnicoVisualizado !== null) ? "block" : "none";
-
 
     renderizarPedidosPorSetor(pedidoUnicoVisualizado);
 
@@ -381,7 +450,6 @@ function logout() {
     document.getElementById("driverLoginErro").textContent = "";
     showUserSelectionPage();
 }
-
 
 function renderizarPedidosPorSetor(idPedidoEspecifico = null) {
     const pedidosPorSetorDiv = document.getElementById("pedidosPorSetor");
@@ -429,6 +497,7 @@ function renderizarPedidosPorSetor(idPedidoEspecifico = null) {
             <div class="pedido-header">
                 <h3>COT_${pedido.id} - ${pedido.cliente}</h3>
                 <p>Endereço: ${pedido.endereco}</p>
+                <p>NF-e: ${getNotaFiscal(pedido.id) ?? "—"}</p>
                 <p>Embarque: ${pedido.embarque}</p>
                 <p class="status-pedido ${statusClass}">Status: ${statusAtual}</p>
             </div>
@@ -563,7 +632,7 @@ function renderizarPedidosPorSetor(idPedidoEspecifico = null) {
             pedidoCard.appendChild(setorDiv);
         });
 
-        // Este é o bloco de código que adiciona o botão de impressão para etiquetas
+
         if (isPedidoSeparado) {
              const btnImprimirEtiquetas = document.createElement("button");
              btnImprimirEtiquetas.textContent = "Imprimir Etiquetas";
@@ -576,7 +645,6 @@ function renderizarPedidosPorSetor(idPedidoEspecifico = null) {
     });
     document.getElementById("pedidosPorSetor").scrollTop = 0;
 }
-
 
 function salvarTodosPesosDoSetor(pedidoId, setor, produtosDoSetor, idPedidoEspecifico) {
     let dadosPeso = getDadosPesoPedido(pedidoId);
@@ -637,7 +705,6 @@ function salvarTodosPesosDoSetor(pedidoId, setor, produtosDoSetor, idPedidoEspec
     }
     renderizarPedidosPorSetor(idPedidoEspecifico);
 }
-
 
 function exibirResumoEmbarques() {
     const embarqueSummaryDiv = document.getElementById("embarqueSummary");
@@ -743,7 +810,6 @@ function goBackToAllOrders() {
     showMainAppScreen();
 }
 
-
 function showModal(title, message, buttonsHtml) {
     document.getElementById("modalTitle").textContent = title;
     document.getElementById("modalMessage").innerHTML = message;
@@ -775,7 +841,6 @@ function aplicarFiltroStatusPrincipal(status, clickedButton) {
     renderizarPedidosPorSetor(pedidoUnicoVisualizado);
 }
 
-
 function exibirCotasPorEmbarque(pedidoId = null) {
     const quotationsSection = document.getElementById("quotationsByEmbarque");
     const quotationListDiv = document.getElementById("quotationList");
@@ -805,7 +870,6 @@ function confirmResetAllData() {
         `
     );
 }
-
 
 function resetAllOrderData() {
     closeModal();
@@ -841,10 +905,9 @@ function resetAllOrderData() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    inicializarNotasFiscais();
     showUserSelectionPage();
 });
-
-
 
 function showLoadingOrdersScreen() {
     hideAllScreens();
@@ -859,7 +922,6 @@ function aplicarFiltroCarregamento(filtro, clickedButton) {
     clickedButton.classList.add('active');
     renderizarPedidosCarregamento();
 }
-
 
 function renderizarPedidosCarregamento() {
     const listDiv = document.getElementById("loadingOrdersList");
@@ -928,6 +990,7 @@ function renderizarPedidosCarregamento() {
                     <div class="pedido-header">
                         <h3>COT_${pedido.id} - ${pedido.cliente}</h3>
                         <p>Endereço: ${pedido.endereco}</p>
+                <p>NF-e: ${getNotaFiscal(pedido.id) ?? "—"}</p>
                         <p>Destinado a: ${motoristaDestino ? motoristaDestino.toUpperCase() : 'Não Destinado'}</p>
                         <p class="status-pedido ${statusClass}">Status: ${statusText}</p>
                     </div>
@@ -1116,6 +1179,7 @@ function gerarPDF(pedidoId) {
     let content = `
         <h1>Relatório de Carregamento - COT_${pedido.id}</h1>
         <p><strong>Cliente:</strong> ${pedido.cliente}</p>
+        <p><strong>NF-e:</strong> ${getNotaFiscal(pedido.id) ?? "—"}</p>
         <p><strong>Endereço:</strong> ${pedido.endereco}</p>
         <hr>
         <h2>Materiais Carregados:</h2>
@@ -1157,7 +1221,6 @@ function gerarPDF(pedidoId) {
     printWindow.print();
 }
 
-
 function getPedidoById(pedidoId) {
     return pedidos.find(p => p.id === pedidoId);
 }
@@ -1187,6 +1250,9 @@ function imprimirEtiquetas(pedidoId) {
     const dadosCertificado = getDadosCertificadoPedido(pedidoId);
 
     let totalItens = 0;
+
+    const notaFiscalNumero = getNotaFiscal(pedido.id);
+
     for (const setor in pedido.produtos) {
         totalItens += pedido.produtos[setor].length;
     }
@@ -1219,6 +1285,8 @@ function imprimirEtiquetas(pedidoId) {
                     margin-bottom: 5mm;
                     position: relative;
                 }
+
+                .nf-badge { position: absolute; top: 3mm; right: 3mm; font-weight: bold; font-size: 8pt; }
 
                 .background-logo {
                     position: absolute;
@@ -1318,7 +1386,7 @@ function imprimirEtiquetas(pedidoId) {
                         <div class="grid-cell"><span class="info">EMPRESA FICTÍCIA LTDA</span></div>
                     </div>
                     <div class="nota-fiscal-row">
-                        <div class="grid-cell">Nota fiscal</div>
+                        <div class="grid-cell"><span>Nota Fiscal:<br><strong class="info">${notaFiscalNumero ?? '—'}</strong></span></div>
                         <div class="grid-cell"><span>Peso:<br><strong class="info">${peso} kg</strong></span></div>
                         <div class="grid-cell"><span>Certificado:<br><strong class="info">${certificado}</strong></span></div>
                         <div class="grid-cell">Data Emissão NF.</div>
