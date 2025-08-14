@@ -1003,8 +1003,7 @@
     display: block; 
     width: 100%; 
 }
-
-.btn-print-etiqueta:hover {
+.btn-print-etiqueta, .btn-fatiar-fardos:hover {
     background-color: #00d5e4;
     transform: translateY(-2px); 
 }
@@ -1012,4 +1011,73 @@
 .btn-print-etiqueta:active {
     transform: translateY(0); 
 
+}
+
+.btn-fatiar-fardos {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-fatiar-fardos:hover {
+    background-color: #e68900;
+    transform: scale(1.05);
+}
+
+.btn-imprimir-fardos {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-imprimir-fardos:hover {
+    background-color: #449d48;
+    transform: scale(1.05);
+}
+
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.fardo-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.fardo-input-group label {
+    flex-basis: 120px;
+    text-align: right;
+}
+
+.fardo-input-group .modal-input {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.modal-error {
+    color: var(--red-error);
+    font-size: 14px;
+    margin-top: 10px;
+    min-height: 20px;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
