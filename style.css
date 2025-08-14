@@ -708,8 +708,8 @@
         }
 
         .logo {
-            width: 195px;
-            height: 160px;
+            width: 300px;
+            height: 200px;
             margin-bottom: 20px;
         }
 
@@ -1002,3 +1002,4 @@
     transform: translateY(0); 
 
 }
+
