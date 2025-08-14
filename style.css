@@ -685,6 +685,7 @@
         }
 
         .user-selection-container {
+            background-color: #e4e4e4;
             display: none;
             flex-direction: column;
             justify-content: center;
@@ -695,22 +696,32 @@
         }
 
         .user-selection-box {
+            background-color: #ffffff;
             width: 100%;
-            max-width: 450px;
+            max-width: 700px;
             animation: fadeIn 0.7s ease-out;
+            background: rgb(255, 255, 255);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(50px);
+            box-shadow: 0 8px 32px rgb(0 0 0 / 66%);
+            text-align: center;
+            width: 700px;
+            color: #ffffff;
+            animation: fadeIn 1.2s ease;
         }
 
         .user-selection-box h2 {
-            margin: 20px 0 30px;
+            margin: 0px 0 30px;
             font-size: 22px;
             font-weight: 500;
             color: var(--dark-gray);
         }
 
         .logo {
-            width: 300px;
-            height: 200px;
-            margin-bottom: 20px;
+            width: 500px;
+            height: 300px;
+            margin-bottom: 0px;
         }
 
         .user-option {
@@ -1002,4 +1013,3 @@
     transform: translateY(0); 
 
 }
-
